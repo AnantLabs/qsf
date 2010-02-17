@@ -4,7 +4,7 @@
 
 .PHONY: all help dep depend depclean make \
   check test memtest benchmark bigbenchmark \
-  clean distclean cvsclean \
+  clean distclean cvsclean svnclean \
   index manhtml indent indentclean \
   changelog doc dist release \
   install uninstall \
@@ -29,7 +29,7 @@ help:
 	@echo '  depclean        remove .d (dependency) files'
 	@echo '  indentclean     remove files left over from "make indent"'
 	@echo '  distclean       remove everything not distributed'
-	@echo '  cvsclean        remove everything not in CVS'
+	@echo '  cvsclean        remove everything not in CVS/SVN'
 	@echo
 	@echo '  index           generate an HTML index of source code'
 	@echo '  manhtml         output HTML man page to stdout'
@@ -93,7 +93,7 @@ distclean: clean depclean
 	rm -f fakemail mboxsplit gmon.out
 	rm Makefile
 
-cvsclean: distclean
+cvsclean svnclean: distclean
 	rm -f doc/lsm
 	rm -f doc/$(package).spec
 	rm -f doc/quickref.1
@@ -148,7 +148,8 @@ dist: doc
 	chmod 755 `find $(package)-$(version)/autoconf/scripts`
 	chmod 755 $(package)-$(version)/configure
 	rm -rf DUMMY `find $(package)-$(version) -type d -name CVS` \
-	 `find $(package)-$(version) -type f -name .cvsignore`
+	  `find $(package)-$(version) -type d -name .svn` \
+	  `find $(package)-$(version) -type f -name .cvsignore`
 	tar cf $(package)-$(version).tar $(package)-$(version)
 	rm -rf $(package)-$(version)
 	-cat $(package)-$(version).tar \
@@ -313,19 +314,19 @@ bigbenchmark: $(package) .test-benchmark-spam
 
 install: all doc
 	$(srcdir)/autoconf/scripts/mkinstalldirs \
-	  "$(DESTDIR)/$(bindir)"
+	  "$(DESTDIR)$(bindir)"
 	$(srcdir)/autoconf/scripts/mkinstalldirs \
-	  "$(DESTDIR)/$(mandir)/man1"
+	  "$(DESTDIR)$(mandir)/man1"
 	$(INSTALL) -m 755 $(package) \
-	  "$(DESTDIR)/$(bindir)/$(package)"
+	  "$(DESTDIR)$(bindir)/$(package)"
 	$(INSTALL) -m 644 doc/quickref.1 \
-	  "$(DESTDIR)/$(mandir)/man1/$(package).1"
-	$(DO_GZIP) "$(DESTDIR)/$(mandir)/man1/$(package).1"      || :
+	  "$(DESTDIR)$(mandir)/man1/$(package).1"
+	$(DO_GZIP) "$(DESTDIR)$(mandir)/man1/$(package).1"      || :
 
 uninstall:
-	$(UNINSTALL) "$(DESTDIR)/$(bindir)/$(package)"
-	$(UNINSTALL) "$(DESTDIR)/$(mandir)/man1/$(package).1"
-	$(UNINSTALL) "$(DESTDIR)/$(mandir)/man1/$(package).1.gz"
+	$(UNINSTALL) "$(DESTDIR)$(bindir)/$(package)"
+	$(UNINSTALL) "$(DESTDIR)$(mandir)/man1/$(package).1"
+	$(UNINSTALL) "$(DESTDIR)$(mandir)/man1/$(package).1.gz"
 
 rpmbuild:
 	echo macrofiles: `rpm --showrc \

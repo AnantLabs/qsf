@@ -1,3 +1,6 @@
+1.x.x - NOT YET RELEASED
+  - removed "DESTDIR" / suffix to fix Cygwin installation
+
 1.2.7 - 28 August 2007
   - license change to Artistic 2.0
   - pointless option "-l" removed

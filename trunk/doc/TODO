@@ -1,5 +1,6 @@
 Things still to do, in order of priority:
 
+  20140901: fix problem reported by David Binderman
   20070222: weight as personal if 1 database, use -d/-g for weight if more
             than 1 (Pavel Kolar)
   20070129: strip \r, re-add afterwards, if first line is \r\n (Nora Etukudo)
